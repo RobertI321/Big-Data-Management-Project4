@@ -12,7 +12,9 @@ big_data_project4/
 │   └── rico_pipeline.py        ✅ done — DAG skeleton, Phase 3
 │
 ├── pipeline/                   ✅ folder exists
-│   └── (all modules)           ❌ not created yet — Phase 5
+│   ├── tracing.py              ✅ done — run_id, fingerprint, git_sha
+│   ├── db.py                   ✅ done — connection helper
+│   └── (remaining modules)     ❌ not created yet — Phase 5
 │
 ├── prompts/                    ✅ folder exists
 │   └── extract_v1.txt          ✅ done — LLM prompt file
@@ -56,22 +58,18 @@ big_data_project4/
   - `.env` and `.gitignore` in place
   - `prompts/extract_v1.txt` created
   - Infrastructure verified (Ollama responding, Postgres accessible)
+- [x] Phase 3 — DAG skeleton
+  - `dags/rico_pipeline.py` with all 8 tasks as stubs (including `_start_run`)
+  - Dependencies wired: start_run → ingest → [parse, embed_image, embed_text] → extract → load → audit
+  - LIMIT param (default 5)
+- [x] Phase 4 — Traceability infrastructure (partial)
+  - `pipeline/tracing.py` — run_id generation, sha256 fingerprint, git_sha capture
+  - `pipeline/db.py` — connection helper from env vars
+  - ❌ Wire run_id creation at DAG start, pass via XCom to all tasks — pending Phase 5
 
 ---
 
 ## What's Next
-
-- [x] Phase 3 — DAG skeleton
-  - Create `dags/rico_pipeline.py`
-  - Define all 7 tasks as stubs (no logic yet)
-  - Wire dependencies: ingest → parse → [embed_image | embed_text | extract] → load → audit → eval
-  - Add LIMIT param (default 5)
-  - Verify DAG appears in Airflow UI without errors
-
-- [ ] Phase 4 — Traceability infrastructure
-  - Create `pipeline/tracing.py` — run_id generation, sha256 fingerprint, git_sha capture
-  - Create `pipeline/db.py` — connection helper from env vars
-  - Wire run_id creation at DAG start, pass via XCom to all tasks
 
 - [ ] Phase 5 — Implement each module
   - `pipeline/ingest.py` — HuggingFace streaming + MinIO upload + Postgres insert

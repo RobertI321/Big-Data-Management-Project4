@@ -7,6 +7,9 @@ from airflow.operators.python import PythonOperator
 
 # Ingest
 
+def _start_run():
+    pass
+
 def _ingest():
     pass
 
@@ -46,6 +49,10 @@ def build_dag():
         params={"limit" : 5} 
 
     ) as dag:
+        start_run = PythonOperator(
+            task_id = "_start_run",
+            python_callable = _start_run
+        )
         
         ingest = PythonOperator(
             task_id = "_ingest",
@@ -77,7 +84,7 @@ def build_dag():
             python_callable = _audit
         )
 
-        ingest >> [parse, embed_image, embed_text] >> extract >> load >> audit
+        start_run >> ingest >> [parse, embed_image, embed_text] >> extract >> load >> audit
     
     return dag
 
