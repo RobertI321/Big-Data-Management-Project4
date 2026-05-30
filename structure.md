@@ -9,7 +9,7 @@ big_data_project4/
 │   └── 01_schema.sql           ✅ done — all 6 tables defined with run_id + source_fingerprint
 │
 ├── dags/                       ✅ folder exists
-│   └── (rico_pipeline.py)      ❌ not created yet — Phase 3
+│   └── rico_pipeline.py        ✅ done — DAG skeleton, Phase 3
 │
 ├── pipeline/                   ✅ folder exists
 │   └── (all modules)           ❌ not created yet — Phase 5
@@ -61,7 +61,7 @@ big_data_project4/
 
 ## What's Next
 
-- [ ] Phase 3 — DAG skeleton
+- [x] Phase 3 — DAG skeleton
   - Create `dags/rico_pipeline.py`
   - Define all 7 tasks as stubs (no logic yet)
   - Wire dependencies: ingest → parse → [embed_image | embed_text | extract] → load → audit → eval
