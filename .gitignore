@@ -1,4 +1,8 @@
 venv/
 .env
+CLAUDE.md
 __pycache__/
 *.pyc
+logs/
+*.egg-info/
+.pytest_cache/

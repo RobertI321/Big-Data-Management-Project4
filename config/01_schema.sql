@@ -11,7 +11,7 @@ WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'airflow')\gexec
 CREATE EXTENSION IF NOT EXISTS vector;
 
 CREATE TABLE IF NOT EXISTS pipeline_runs(
-    id BIGINT PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     run_id UUID DEFAULT gen_random_uuid() UNIQUE,
     dag_run_id VARCHAR(255) NOT NULL,
     started_at TIMESTAMP DEFAULT NULL,
@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS pipeline_runs(
 );
 
 CREATE TABLE IF NOT EXISTS audit_results(
-    id BIGINT PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     run_id UUID NOT NULL,
     audit_name VARCHAR(255) NOT NULL,
     passed boolean NOT NULL,
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS audit_results(
 );
 
 CREATE TABLE IF NOT EXISTS pipeline_metrics(
-    id BIGINT PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     run_id UUID NOT NULL,
     metric_name VARCHAR(255) NOT NULL,
     metric_value FLOAT NOT NULL,
@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS screens_metadata (
     created_at          TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at          TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     run_id              UUID NOT NULL,
-    source_fingerprint    TEXT,
+    source_fingerprint    TEXT NOT NULL,
     FOREIGN KEY (run_id) REFERENCES pipeline_runs(run_id) ON DELETE CASCADE
 );
 
@@ -70,7 +70,7 @@ CREATE TABLE IF NOT EXISTS screens_embeddings (
     vector         vector NOT NULL,
     created_at     TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     run_id         UUID NOT NULL,
-    source_fingerprint TEXT,
+    source_fingerprint TEXT NOT NULL,
     PRIMARY KEY (screen_id, model_name, model_version, embedding_kind),
     FOREIGN KEY (run_id) REFERENCES pipeline_runs(run_id) ON DELETE CASCADE
 );
@@ -82,6 +82,6 @@ CREATE TABLE IF NOT EXISTS screens_review_queue (
     raw_output  TEXT,
     created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     run_id      UUID NOT NULL,
-    source_fingerprint TEXT,
+    source_fingerprint TEXT NOT NULL,
     FOREIGN KEY (run_id) REFERENCES pipeline_runs(run_id) ON DELETE CASCADE
 );
