@@ -5,7 +5,9 @@
 # airflow-init installs once and webserver/scheduler reuse the same site-packages.
 
 x-airflow-common: &airflow-common
-  image: apache/airflow:2.9.1-python3.11
+  build:
+    context: .
+    dockerfile: airflow/Dockerfile
   env_file: .env
   environment:
     AIRFLOW__CORE__EXECUTOR: LocalExecutor
@@ -108,7 +110,6 @@ services:
       - /bin/bash
       - -c
       - |
-        pip install -r /opt/airflow/requirements.txt &&
         airflow db migrate &&
         (airflow users create --username airflow --password airflow --firstname Rico --lastname Bot --role Admin --email rico@example.com || true)
     depends_on:
