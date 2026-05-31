@@ -146,3 +146,6 @@ Makefile                    up/down/clean/reset/dev-reset/logs targets
 requirements.txt            Python dependencies installed into Airflow containers
 .env                        Environment variables (not committed to git)
 ```
+## DAG
+
+![DAG graph](screenshots/dag.png)
